@@ -1,0 +1,172 @@
+%\title{Project Report}
+%
+%%% Preamble
+\documentclass[paper=a4, fontsize=11pt]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage{fourier}
+\usepackage{listings}
+
+\usepackage[english]{babel}															% English language/hyphenation
+\usepackage[protrusion=true,expansion=true]{microtype}	
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage[pdftex]{graphicx}	
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage[margin=1.00in]{geometry}
+\usepackage{amsmath}
+
+%%% Custom sectioning
+\usepackage{sectsty}
+\allsectionsfont{\centering \normalfont\scshape}
+
+
+%%% Custom headers/footers (fancyhdr package)
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead{}											% No page header
+\fancyfoot[L]{}											% Empty 
+\fancyfoot[C]{}											% Empty
+\fancyfoot[R]{\thepage}									% Pagenumbering
+\renewcommand{\headrulewidth}{0pt}			% Remove header underlines
+\renewcommand{\footrulewidth}{0pt}				% Remove footer underlines
+\setlength{\headheight}{3.6pt}
+\date{}
+
+
+%%% Equation and float numbering
+\numberwithin{equation}{section}		% Equationnumbering: section.eq#
+\numberwithin{figure}{section}			% Figurenumbering: section.fig#
+\numberwithin{table}{section}				% Tablenumbering: section.tab#
+
+
+%%% Maketitle metadata
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
+
+\title{
+		\vspace{-1in} 	
+		\usefont{OT1}{bch}{b}{n}
+		\normalfont \normalsize \textsc{Durham Computer Science} \\ [5pt]
+		\horrule{0.5pt} \\[0.4cm]
+		\large  Bioinformatics Assignment - LLLL76\\
+		\horrule{2pt} \\[0.5cm]
+		\vspace{-1in} 	
+}
+
+%%% Begin document
+\begin{document}
+\maketitle
+\section*{Question One}
+
+\iffalse
+This question is about the Build algorithm from A. V. Aho, Y. Sagiv, T. G. Szymanski, J. D. Ullman. Inferring a tree from lowest common ancestors with an application to the optimization of relational expressions. SIAM Journal on Computing
+\fi
+
+\subsection*{A - 25 Marks}
+
+\iffalse
+Explain what the algorithm does and how it works in your own words. Do not use pseudocode
+\fi
+
+- given a tree \\
+- given lineage constraints \\
+- in the form (i, j) < (k,l) where (i, j) is the lowest common ancestor of i and j \\
+- using this algorithm a tree will be created such that all lineage constraints are observed \\
+- if no tree can be created then Null will be returned \\
+- this is done by splitting the set of leaf nodes into the number of sets created by removing the root nodes \\
+- and observing a set of rules that are to be followed if a tree is to exist \\
+- 1 - for each constraint i and j are in the same set \\
+- if they are not then the lowest common ancestor is the root node which cannot be a descendent of anything so we have an issue \\
+- 2 - for each constraint if k and l are in the same set the i,j,k,l are in the same set \\
+- if they are not in the same set then they cannot be compared as they are not in the same descendent line.\\
+- 3 - No to leaves are in the same block unless it follows from rules 1 and 2\\
+
+
+This is done recursively. \\
+given a set of non empty leaf nodes and the set constraints\\
+if the set contains a single node then return the a tree consisting of only that node \\
+if the set contains more than a single node \\
+remove the root node of the current set \\
+splitting the leaf nodes set into a set of sets \\
+if the number of sets is one then return the null tree \\
+else \\
+for each of the sets \\
+restrict the set of constraints to those that contain any relevant leaf nodes \\
+calculate the tree that satisfies this altered set of leaf nodes and constraints recursively \\
+if the tree returned is the Null tree then return the Null tree \\
+if for every subset in cN no null tree is returned then a tree does exist\\
+
+let T be the tree with a new node for its root and whose children are the roots of $T,., 1 =< m -<_ r$ \\
+return T
+
+\subsubsection*{B - 20 Marks}
+
+\iffalse
+Expand the partition step (given below) in pseudocode
+compute πC = S1, S2, . . . Sr;
+\fi
+
+
+
+\subsubsection*{C - 25 Marks}
+
+\iffalse
+Write a recurrence that expresses the running time of Build depending on the
+number of different leaf-labels n and the number of constraints m. Use it to
+estimate the running time of the algorithm assuming that the partitioning step
+runs in time f (n, m) for some function monotonically nondecreasing function f.
+\fi
+
+\subsubsection*{D - 25 Marks}
+
+\iffalse
+Run the algorithm on the following set of constraints
+(e, f) < (k, d) (c, l) < (g, k)
+(c, h) < (a, n) (g, b) < (g, i)
+(j, n) < (j, l) (g, i) < (d, m)
+(c, a) < (f, h) (c, h) < (c, a)
+(j, l) < (e, n) (e, f) < (h, l)
+(n, l) < (a, f) (j, l) < (j, a)
+(d, i) < (k, n) (k, m) < (e, i)
+(d, i) < (g, i) (j, n) < (j, f).
+You should show the partitioning and the recursive calls at each stage.
+\fi
+
+\subsubsection*{E - 30 Marks}
+
+\iffalse
+Reverse the Build algorithm, i,e. design an algorithm that takes a tree with labelled leaves
+as an input, and produces a set of constraints of the form (i, j) < (k, l), such that when
+Build runs on that set, the result is (an isomorphic copy of) the input tree. Prove the
+correctness of your algorithm. Also, a smaller output (number of constraints) would give
+you a better mark. 
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Question Two}
+
+\iffalse
+This question is about the MinCutSupertree algorithm from  C. Semple and M. Steel. A supertree method for rooted trees. Discrete Applied Mathematics
+\fi
+
+\subsubsection*{A - 15 Marks}
+
+\iffalse
+One of its properties is that it preserves nesting and subtrees that are shared
+by all of the input trees. Point where precisely in the algorithm this property
+is achieved.
+\fi
+
+\subsubsection*{B - 10 Marks}
+
+\iffalse
+Argue that the MinCutSupertree algorithm is a generalisation of the Build
+algorithm, i.e. show how to encode a constraint from the inputs of the later as
+a tree, which is one of the inputs of the former.
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% End document
+\end{document}
