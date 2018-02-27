@@ -35,6 +35,7 @@
 \date{}
 
 \newcommand\tab[1][1cm]{\hspace*{#1}}
+\newcommand\dent[1][0.5cm]{\hspace*{#1}}
 
 
 %%% Equation and float numbering
@@ -81,12 +82,11 @@ compute πC = S1, S2, . . . Sr;
 \fi
 
 
-$\pi_c(SetOfNodes):$\\
+\dent$\pi_c(SetOfNodes):$\\
 \tab$set = (\;)$\\
 \tab$For\;child\;in\;Children(root):$\\
 \tab\tab$set.append(GetLeaves(child,\;SetOfNodes))$\\
 \tab$Return(set)$ \\
-
 
 $GetLeaves(node,SetOfNodes):$\\
 \tab$If\;Children(node)\;=\;Null:$\\
@@ -112,16 +112,8 @@ runs in time f (n, m) for some function monotonically nondecreasing function f.
 
 \iffalse
 Run the algorithm on the following set of constraints
-(e, f) < (k, d) (c, l) < (g, k)
-(c, h) < (a, n) (g, b) < (g, i)
-(j, n) < (j, l) (g, i) < (d, m)
-(c, a) < (f, h) (c, h) < (c, a)
-(j, l) < (e, n) (e, f) < (h, l)
-(n, l) < (a, f) (j, l) < (j, a)
-(d, i) < (k, n) (k, m) < (e, i)
-(d, i) < (g, i) (j, n) < (j, f).
+(e, f) < (k, d) (c, l) < (g, k) (c, h) < (a, n) (g, b) < (g, i) (j, n) < (j, l) (g, i) < (d, m) (c, a) < (f, h) (c, h) < (c, a) (j, l) < (e, n) (e, f) < (h, l) (n, l) < (a, f) (j, l) < (j, a) (d, i) < (k, n) (k, m) < (e, i) (d, i) < (g, i) (j, n) < (j, f)
 You should show the partitioning and the recursive calls at each stage.
-\fi
 
 \begin{center}
 1 - (e, f) < (k, d)\\
@@ -141,74 +133,124 @@ You should show the partitioning and the recursive calls at each stage.
 15 - (k, m) < (e, i)\\
 16 -  (j, n) < (j, f)\\
 \end{center}
+\fi
 
-\begin{center}
-(a b c d e f g h i j k l m n)\\
-\vspace{4mm}
+\noindent
+$BUILD($\\
+\tab$(a,b,c,d,e,f,g,h,i,j,k,l,m,n),$\\
+\tab$((e, f) < (k, d) (c, l) < (g, k) (c, h) < (a, n) (g, b) < (g, i) (j, n) < (j, l) (g, i) < (d, m) (c, a) < (f, h) (c, h) < (c, a) (j, l) < (e, n) (e, f) < (h, l) (n, l) < (a, f) (j, l) < (j, a) (d, i) < (k, n) (k, m) < (e, i) (d, i) < (g, i) (j, n) < (j, f))$\\
+$):$\\
 
-Apply 1 \\
-(e f) \\ (a b c d g h i j k l m n)\\
-\vspace{4mm}
 
-Apply 2 \\
-(e f) (c h) \\ (a b d g i j k l m n)\\
-\vspace{4mm}
+\noindent
+\tab$\pi_c\;=\;(e,f,a,c,h,j,l,n),(d,i,b,g),(k,m)$\\
 
-Apply 3 \\
-(e f) (c h) (j n) \\ (a b d g i k l m)\\
-\vspace{4mm}
 
-Apply 4 \\
-(e f) (a c h) (j n) \\ (b d g i k l m)\\
-\vspace{4mm}
+\noindent
+\tab$For\;m\;:=\;1\;to\;3\;do$\\
 
-Apply 5 - Recurse Apply 3\\
-(e f) (a c h) (j l n) \\ (b d g i k m)\\
-\vspace{4mm}
 
-Apply 6 \\
-(e f) (a c h) (j l n) \\ (b d g i k m)\\
-\vspace{4mm}
+\noindent
+\tab\tab$C_1 = ((c, h) < (a, n),(j, n) < (j, l),(c, a) < (f, h),(j, l) < (e, n),(n, l) < (a, f), (c, h) < (c, a),(e, f) < (h, l),(j, l) < (j, a), (j, n) < (j, f))$\\
+\tab\tab$T_1 = BUILD($\\
+\tab\tab\tab$(e,f,a,c,h,j,l,n),$\\
+\tab\tab\tab$ ((c, h) < (a, n),(j, n) < (j, l),(c, a) < (f, h),(j, l) < (e, n),(n, l) < (a, f), (c, h) < (c, a),(e, f) < (h, l),(j, l) < (j, a), (j, n) < (j, f))$\\
+\tab\tab$)$\\
+\tab\tab\tab$\pi_c\;=\;(c,h,a),(j,n,l),(e,f),(i)$\\
+\tab\tab\tab$For\;m\;:=\;1\;to\;4\;do$\\
+\tab\tab\tab\tab$C_1 = (\;)$\\
+\tab\tab\tab\tab$T_1 = BUILD((c,h,a),(\;))$\\
+\tab\tab\tab\tab\tab$\pi_c\;=\;(c),(h),(a)$\\
+\tab\tab\tab\tab\tab$For\;m\;:=\;1\;to\;3\;do$\\
+\tab\tab\tab\tab\tab\tab$C_1 = (\;)$\\
+\tab\tab\tab\tab\tab\tab$T_1 = BUILD((c),(\;))$\\
+\tab\tab\tab\tab\tab\tab\tab$Return(c)$\\
+\tab\tab\tab\tab\tab\tab$C_2 = (\;)$\\
+\tab\tab\tab\tab\tab\tab$T_2 = BUILD((h),(\;))$\\
+\tab\tab\tab\tab\tab\tab\tab$Return(h)$\\
+\tab\tab\tab\tab\tab\tab$C_3 = (\;)$\\
+\tab\tab\tab\tab\tab\tab$T_3 = BUILD((a),(\;))$\\
+\tab\tab\tab\tab\tab\tab\tab$Return(a)$\\
+\tab\tab\tab\tab$C_2 = (\;)$\\
+\tab\tab\tab\tab$T_2 = BUILD((j,n,l),(\;))$\\
+\tab\tab\tab\tab\tab$\pi_c\;=\;(j),(n),(l)$\\
+\tab\tab\tab\tab\tab$For\;m\;:=\;1\;to\;3\;do$\\
+\tab\tab\tab\tab\tab\tab$C_1 = (\;)$\\
+\tab\tab\tab\tab\tab\tab$T_1 = BUILD((j),(\;))$\\
+\tab\tab\tab\tab\tab\tab\tab$Return(j)$\\
+\tab\tab\tab\tab\tab\tab$C_2 = (\;)$\\
+\tab\tab\tab\tab\tab\tab$T_2 = BUILD((n),(\;))$\\
+\tab\tab\tab\tab\tab\tab\tab$Return(n)$\\
+\tab\tab\tab\tab\tab\tab$C_3 = (\;)$\\
+\tab\tab\tab\tab\tab\tab$T_3 = BUILD((l),(\;))$\\
+\tab\tab\tab\tab\tab\tab\tab$Return(l)$\\
+\tab\tab\tab\tab$C_3 = (\;)$\\
+\tab\tab\tab\tab$T_3 = BUILD((e,f),(\;))$\\
+\tab\tab\tab\tab\tab$\pi_c\;=\;(e),(f)$\\
+\tab\tab\tab\tab\tab$For\;m\;:=\;1\;to\;2\;do$\\
+\tab\tab\tab\tab\tab\tab$C_1 = (\;)$\\
+\tab\tab\tab\tab\tab\tab$T_1 = BUILD((e),(\;))$\\
+\tab\tab\tab\tab\tab\tab\tab$Return(e)$\\
+\tab\tab\tab\tab\tab\tab$C_2 = (\;)$\\
+\tab\tab\tab\tab\tab\tab$T_2 = BUILD((f),(\;))$\\
+\tab\tab\tab\tab\tab\tab\tab$Return(f)$\\
+\tab\tab\tab\tab$C_4 = (\;)$\\
+\tab\tab\tab\tab$T_4 = BUILD((i),(\;))$\\
+\tab\tab\tab\tab\tab$Return(i)$\\
 
-Apply 7 \\
-(e f) (a c h) (j l n) (d i) \\ (b g k m)\\
-\vspace{4mm}
 
-Apply 8 \\
-(e f) (a c h) (j l n) (d i) \\ (b g k m)\\
-\vspace{4mm}
+\noindent
+\tab\tab$C_2 = ((d, i) < (g, i),(g, b) < (g, i))$\\
+\tab\tab$T_2 = BUILD($\\
+\tab\tab\tab$(d,i,b,g),$\\
+\tab\tab\tab$((d, i) < (g, i),(g, b) < (g, i))$\\
+\tab\tab$)$\\
+\tab\tab\tab$\pi_c\;=\;(d,i),(g,b)$\\
+\tab\tab\tab$For\;m\;:=\;1\;to\;2\;do$\\
+\tab\tab\tab\tab$C_1 = (\;)$\\
+\tab\tab\tab\tab$T_1 = BUILD((d,i),(\;))$\\
+\tab\tab\tab\tab\tab$\pi_c\;=\;(d),(i)$\\
+\tab\tab\tab\tab\tab$For\;m\;:=\;1\;to\;2\;do$\\
+\tab\tab\tab\tab\tab\tab$C_1 = (\;)$\\
+\tab\tab\tab\tab\tab\tab$T_1 = BUILD((d),(\;))$\\
+\tab\tab\tab\tab\tab\tab\tab$Return(d)$\\
+\tab\tab\tab\tab\tab\tab$C_2 = (\;)$\\
+\tab\tab\tab\tab\tab\tab$T_2 = BUILD((i),(\;))$\\
+\tab\tab\tab\tab\tab\tab\tab$Return(i)$\\
+\tab\tab\tab\tab$C_2 = (\;)$\\
+\tab\tab\tab\tab$T_2 = BUILD((g,b),(\;))$\\
+\tab\tab\tab\tab\tab$\pi_c\;=\;(g),(b)$\\
+\tab\tab\tab\tab\tab$For\;m\;:=\;1\;to\;2\;do$\\
+\tab\tab\tab\tab\tab\tab$C_1 = (\;)$\\
+\tab\tab\tab\tab\tab\tab$T_1 = BUILD((g),(\;))$\\
+\tab\tab\tab\tab\tab\tab\tab$Return(g)$\\
+\tab\tab\tab\tab\tab\tab$C_2 = (\;)$\\
+\tab\tab\tab\tab\tab\tab$T_2 = BUILD((b),(\;))$\\
+\tab\tab\tab\tab\tab\tab\tab$Return(b)$\\
 
-Apply 9 - Recurse Apply 2\\
-(e f) (a c h j l n) (d i) \\ (b g k m)\\
-\vspace{4mm}
 
-Apply 10 \\
-(e f) (a c h j l n) (d i) (b g) \\ (k m)\\
-\vspace{4mm}
+\noindent
+\tab\tab$C_3 = (k,m)$\\
+\tab\tab$T_3 = BUILD($\\
+\tab\tab\tab$(k,m),$\\
+\tab\tab\tab$(\;)$\\
+\tab\tab$)$\\
+\tab\tab\tab$\pi_c\;=\;(k),(m)$\\
+\tab\tab\tab$For\;m\;:=\;1\;to\;2\;do$\\
+\tab\tab\tab\tab$C_1 = (\;)$\\
+\tab\tab\tab\tab$T_1 = BUILD((k),(\;))$\\
+\tab\tab\tab\tab\tab$Return(k)$\\
+\tab\tab\tab\tab$C_1 = (\;)$\\
+\tab\tab\tab\tab$T_1 = BUILD((m),(\;))$\\
+\tab\tab\tab\tab\tab$Return(m)$\\
 
-Apply 11 - Recurse Apply 10 and 8\\
-(e f) (a c h j l n) (d i b g) \\ (k m)\\
-\vspace{4mm}
 
-Apply 12 \\
-(e f) (a c h j l n) (d i b g) \\ (k m)\\
-\vspace{4mm}
+\noindent
+\tab$Create\;Tree\;T\;with\;new\;root\;and\;the\;roots\;of\;T_m\;as\;children\;where\;1<=m<=r$\\
 
-Apply 13 - Recurse Apply 4,5,6,12\\
-(e f a c h j l n) (d i b g) \\ (k m)\\
-\vspace{4mm}
 
-Apply 14 \\
-(e f a c h j l n) (d i b g) \\ (k m)\\
-\vspace{4mm}
-
-Apply 15 \\
-(e f a c h j l n) (d i b g) (k m)\\
-\vspace{4mm}
-
-Apply 16 \\
-(e f a c h j l n) (d i b g) (k m)\\
-\end{center}
+\noindent
+\tab$Return(T)$\\
 
 \subsubsection*{E - 30 Marks}
 
