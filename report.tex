@@ -34,6 +34,8 @@
 \setlength{\headheight}{3.6pt}
 \date{}
 
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
 
 %%% Equation and float numbering
 \numberwithin{equation}{section}		% Equationnumbering: section.eq#
@@ -69,36 +71,7 @@ This question is about the Build algorithm from A. V. Aho, Y. Sagiv, T. G. Szyma
 Explain what the algorithm does and how it works in your own words. Do not use pseudocode
 \fi
 
-- given a tree \\
-- given lineage constraints \\
-- in the form (i, j) < (k,l) where (i, j) is the lowest common ancestor of i and j \\
-- using this algorithm a tree will be created such that all lineage constraints are observed \\
-- if no tree can be created then Null will be returned \\
-- this is done by splitting the set of leaf nodes into the number of sets created by removing the root nodes \\
-- and observing a set of rules that are to be followed if a tree is to exist \\
-- 1 - for each constraint i and j are in the same set \\
-- if they are not then the lowest common ancestor is the root node which cannot be a descendent of anything so we have an issue \\
-- 2 - for each constraint if k and l are in the same set the i,j,k,l are in the same set \\
-- if they are not in the same set then they cannot be compared as they are not in the same descendent line.\\
-- 3 - No to leaves are in the same block unless it follows from rules 1 and 2\\
-
-
-This is done recursively. \\
-given a set of non empty leaf nodes and the set constraints\\
-if the set contains a single node then return the a tree consisting of only that node \\
-if the set contains more than a single node \\
-remove the root node of the current set \\
-splitting the leaf nodes set into a set of sets \\
-if the number of sets is one then return the null tree \\
-else \\
-for each of the sets \\
-restrict the set of constraints to those that contain any relevant leaf nodes \\
-calculate the tree that satisfies this altered set of leaf nodes and constraints recursively \\
-if the tree returned is the Null tree then return the Null tree \\
-if for every subset in cN no null tree is returned then a tree does exist\\
-
-let T be the tree with a new node for its root and whose children are the roots of $T,., 1 =< m -<_ r$ \\
-return T
+Given a set of leaf nodes, S, and a set of constraints on these nodes, C, build a tree such that all the constraints are true. A single constraint is in the form $(x, y) < (a,b)$ where $(a,b)$ is a single node that is an ancestor of both a and b and has no descendants that are also an ancestor of both a and b. In the example constraint (x,y) is a descendent of (a,b), this forms a constraint. The build algorithm recursively splits the set of leaf nodes into sub-sets so as to create sub-trees in the tree that is created by the algorithms execution. The algorithm starts with a recursion end check, if S has length one then just return that node itself, a single node cannot be a tree. At the first execution of the function BUILD, compute $\pi_c$, this is the splitting of the input set given the constraints using three rules. Rule one is for each constraint in the form $(x, y) < (a,b)$, x and y are in the same block. Rule two is for each constraint in the form $(x, y) < (a,b)$, if a and b are in the same block then x,y,a,b are all in the same block. Rule three is that no two leaves are in the same block unless it is shown by rules one and two. Once these rules have been applied a number of subsets exist, 1 to r. If r is equal to one then a null tree is returned because the number of subsets is zero. For each of these numbers calculate $C_m$ or the set of constants that apply to that subset and $T_m$ or the tree that is created by that subset, this is done by recursively calling the build algorithm on the set of nodes that are in this subset and the set of constraints that apply to this subset. Once this has been done for all children of the root node then a tree exists, a new root node is created such that each of its children is the root node of the trees $T_x$ where x is each of the numbers 1 to r corresponding to subsets of the set of leaf nodes. This tree is then returned. 
 
 \subsubsection*{B - 20 Marks}
 
@@ -108,6 +81,21 @@ compute πC = S1, S2, . . . Sr;
 \fi
 
 
+$\pi_c(SetOfNodes):$\\
+\tab$set = (\;)$\\
+\tab$For\;child\;in\;Children(root):$\\
+\tab\tab$set.append(GetLeaves(child,\;SetOfNodes))$\\
+\tab$Return(set)$ \\
+
+
+$GetLeaves(node,SetOfNodes):$\\
+\tab$If\;Children(node)\;=\;Null:$\\
+\tab\tab$Return(node)$\\
+\tab$Else:$\\
+\tab\tab$set\;=\;(\;)$\\
+\tab\tab$For\;child\;in\;Children(node):$\\
+\tab\tab\tab$set.append(GetLeaves(child,\;SetOfNodes))$\\
+\tab\tab$Return(set)$
 
 \subsubsection*{C - 25 Marks}
 
@@ -117,6 +105,8 @@ number of different leaf-labels n and the number of constraints m. Use it to
 estimate the running time of the algorithm assuming that the partitioning step
 runs in time f (n, m) for some function monotonically nondecreasing function f.
 \fi
+
+
 
 \subsubsection*{D - 25 Marks}
 
@@ -132,6 +122,93 @@ Run the algorithm on the following set of constraints
 (d, i) < (g, i) (j, n) < (j, f).
 You should show the partitioning and the recursive calls at each stage.
 \fi
+
+\begin{center}
+1 - (e, f) < (k, d)\\
+2- (c, h) < (a, n)\\
+3 - (j, n) < (j, l)\\
+4 - (c, a) < (f, h)\\
+5 - (j, l) < (e, n)\\
+6 - (n, l) < (a, f)\\
+7 - (d, i) < (k, n)\\
+8 - (d, i) < (g, i)\\
+9 - (c, l) < (g, k)\\
+10 - (g, b) < (g, i)\\
+11 - (g, i) < (d, m)\\
+12 - (c, h) < (c, a)\\
+13 - (e, f) < (h, l)\\
+14 -  (j, l) < (j, a)\\
+15 - (k, m) < (e, i)\\
+16 -  (j, n) < (j, f)\\
+\end{center}
+
+\begin{center}
+(a b c d e f g h i j k l m n)\\
+\vspace{4mm}
+
+Apply 1 \\
+(e f) \\ (a b c d g h i j k l m n)\\
+\vspace{4mm}
+
+Apply 2 \\
+(e f) (c h) \\ (a b d g i j k l m n)\\
+\vspace{4mm}
+
+Apply 3 \\
+(e f) (c h) (j n) \\ (a b d g i k l m)\\
+\vspace{4mm}
+
+Apply 4 \\
+(e f) (a c h) (j n) \\ (b d g i k l m)\\
+\vspace{4mm}
+
+Apply 5 - Recurse Apply 3\\
+(e f) (a c h) (j l n) \\ (b d g i k m)\\
+\vspace{4mm}
+
+Apply 6 \\
+(e f) (a c h) (j l n) \\ (b d g i k m)\\
+\vspace{4mm}
+
+Apply 7 \\
+(e f) (a c h) (j l n) (d i) \\ (b g k m)\\
+\vspace{4mm}
+
+Apply 8 \\
+(e f) (a c h) (j l n) (d i) \\ (b g k m)\\
+\vspace{4mm}
+
+Apply 9 - Recurse Apply 2\\
+(e f) (a c h j l n) (d i) \\ (b g k m)\\
+\vspace{4mm}
+
+Apply 10 \\
+(e f) (a c h j l n) (d i) (b g) \\ (k m)\\
+\vspace{4mm}
+
+Apply 11 - Recurse Apply 10 and 8\\
+(e f) (a c h j l n) (d i b g) \\ (k m)\\
+\vspace{4mm}
+
+Apply 12 \\
+(e f) (a c h j l n) (d i b g) \\ (k m)\\
+\vspace{4mm}
+
+Apply 13 - Recurse Apply 4,5,6,12\\
+(e f a c h j l n) (d i b g) \\ (k m)\\
+\vspace{4mm}
+
+Apply 14 \\
+(e f a c h j l n) (d i b g) \\ (k m)\\
+\vspace{4mm}
+
+Apply 15 \\
+(e f a c h j l n) (d i b g) (k m)\\
+\vspace{4mm}
+
+Apply 16 \\
+(e f a c h j l n) (d i b g) (k m)\\
+\end{center}
 
 \subsubsection*{E - 30 Marks}
 
