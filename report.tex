@@ -75,7 +75,7 @@ Explain what the algorithm does and how it works in your own words. Do not use p
 
 Given a set of leaf nodes, S, and a set of constraints on these nodes, C, build a tree such that all the constraints are true. A single constraint is in the form $(x, y) < (a,b)$ where $(a,b)$ is a single node that is an ancestor of both a and b and has no descendants that are also an ancestor of both a and b. In the example constraint (x,y) is a descendent of (a,b), this forms a constraint. The build algorithm recursively splits the set of leaf nodes into sub-sets so as to create sub-trees in the tree that is created by the algorithms execution. The algorithm starts with a recursion end check, if S has length one then just return that node itself, a single node cannot be a tree. At the first execution of the function BUILD, compute $\pi_c$, this is the splitting of the input set given the constraints using three rules. Rule one is for each constraint in the form $(x, y) < (a,b)$, x and y are in the same block. Rule two is for each constraint in the form $(x, y) < (a,b)$, if a and b are in the same block then x,y,a,b are all in the same block. Rule three is that no two leaves are in the same block unless it is shown by rules one and two. Once these rules have been applied a number of subsets exist, 1 to r. If r is equal to one then a null tree is returned because the number of subsets is zero. For each of these numbers calculate $C_m$ or the set of constants that apply to that subset and $T_m$ or the tree that is created by that subset, this is done by recursively calling the build algorithm on the set of nodes that are in this subset and the set of constraints that apply to this subset. Once this has been done for all children of the root node then a tree exists, a new root node is created such that each of its children is the root node of the trees $T_x$ where x is each of the numbers 1 to r corresponding to subsets of the set of leaf nodes. This tree is then returned. 
 
-\subsubsection*{B}
+\subsection*{B}
 
 \iffalse
 Expand the partition step (given below) in pseudocode
@@ -98,7 +98,7 @@ $GetLeaves(node,SetOfNodes):$\\
 \tab\tab\tab$set.append(GetLeaves(child,\;SetOfNodes))$\\
 \tab\tab$Return(set)$
 
-\subsubsection*{C}
+\subsection*{C}
 
 \iffalse
 Write a recurrence that expresses the running time of Build depending on the
@@ -107,9 +107,22 @@ estimate the running time of the algorithm assuming that the partitioning step
 runs in time f (n, m) for some function monotonically nondecreasing function f.
 \fi
 
+\begin{center}
+$T(n,m) <= K\;T(n_i,m_i) + L\;f(n_i,m_i)$\\
+where\\
+$K\;<=\;2n-1$\\
+$L\;<=\;n-1$\\
+and
+\end{center}
+$n_i$ is the nodes in one of the subsets of n that are the result of running the partition step. $m_i$ is one of the subsets of m that are the result of running the partition step.\\
+Therefore the time complexity is given as:
+\begin{center}
+$T(n,m) <= O(2n-1) + O(n-1)f(n,m)$\\
+$T(n,m) <= O(n) + O(n)f(n,m)$\\
+$T(n,m) <= O(n)f(n,m)$
+\end{center}
 
-
-\subsubsection*{D}
+\subsection*{D}
 
 \iffalse
 Run the algorithm on the following set of constraints
@@ -292,7 +305,7 @@ Where T =
 \end{forest}
 \end{center}
 
-\subsubsection*{E}
+\subsection*{E}
 
 \iffalse
 Reverse the Build algorithm, i,e. design an algorithm that takes a tree with labelled leaves
@@ -302,6 +315,20 @@ correctness of your algorithm. Also, a smaller output (number of constraints) wo
 you a better mark. 
 \fi
 
+$REVERSE-BUILD(T):$\\
+\tab$For\;each\;internal\;node\;x:$\\
+\tab\tab$Create\;a\;set\;S_x$\\
+\tab\tab$For\;range\;(1:NumberOfChildren(x)-1):$\\
+\tab\tab\tab$S_x.append((ListOfChildren[0],ListOfChildren[1]))$\\
+\tab\tab\tab$Remove(ListOfChildren[0])$\\
+\tab\tab$End$\\
+\tab$End$\\
+\tab$For\;each\;internal\;node\;x:$\\
+\tab\tab$For\;each\;pair\;in\;set\;S_x:$\\
+\tab\tab\tab$Create\;constraint\;S_{child}\;<\;S_{parent[0]}$\\
+\tab\tab$End$\\
+\tab$End$\\
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section*{Question Two}
@@ -310,7 +337,7 @@ you a better mark.
 This question is about the MinCutSupertree algorithm from  C. Semple and M. Steel. A supertree method for rooted trees. Discrete Applied Mathematics
 \fi
 
-\subsubsection*{A}
+\subsection*{A}
 
 \iffalse
 One of its properties is that it preserves nesting and subtrees that are shared
@@ -320,7 +347,7 @@ is achieved.
 
 
 
-\subsubsection*{B}
+\subsection*{B}
 
 \iffalse
 Argue that the MinCutSupertree algorithm is a generalisation of the Build
