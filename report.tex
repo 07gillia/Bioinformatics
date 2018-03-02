@@ -345,7 +345,7 @@ by all of the input trees. Point where precisely in the algorithm this property
 is achieved.
 \fi
 
-
+Step five of the algorithm is where nesting and subtrees are preserved. This is done by merging two nodes that appear in all graphs as an identical subtree. The algorithmic steps of this are a test of all edges in the graph made in step three, if the weighting of any edge is equal to the number of tree input to the algorithm, this means that the two nodes that are to be merged have a common ancestor that isn't the root in all trees meaning that it is a subtree and by merging these nodes this subtree cannot be dissected and will be maintained in the final supertree.
 
 \subsection*{B}
 
@@ -354,6 +354,34 @@ Argue that the MinCutSupertree algorithm is a generalisation of the Build
 algorithm, i.e. show how to encode a constraint from the inputs of the later as
 a tree, which is one of the inputs of the former.
 \fi
+
+The build algorithm is based upon constraints, these can be represented as graphs and the set of all graphical representations of the constraints for any given input to the Build algorithm can be used as input to the MinCutSupertree algorithm to achieve the same result as the build algorithm.\\
+
+There are two cases that a constraint can fall into. If the constraint is in the form $(a,b)<(c,d)$ and $a\;!=b\;!=c\;!=d$ then the tree will look like:\\
+\begin{forest}
+[
+	[
+		[a]
+		[b]	
+	]
+	[c]
+	[d]
+]
+\end{forest}
+
+If the constraint is in the form $(a,b)<(c,d)$ and $a == d\;or\;b == d$ then the tree will look like
+
+\begin{forest}
+[
+	[
+		[a]
+		[b]	
+	]
+	[c]
+]
+\end{forest}
+
+These are the only two possible forms that a constraint can take.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% End document
